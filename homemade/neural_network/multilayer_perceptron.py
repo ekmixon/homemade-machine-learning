@@ -135,10 +135,7 @@ class MultilayerPerceptron:
             data, labels, thetas, layers, regularization_param
         )
 
-        # Unroll thetas gradients.
-        thetas_unrolled_gradients = MultilayerPerceptron.thetas_unroll(thetas_rolled_gradients)
-
-        return thetas_unrolled_gradients
+        return MultilayerPerceptron.thetas_unroll(thetas_rolled_gradients)
 
     # pylint: disable=R0914
     @staticmethod
@@ -188,9 +185,7 @@ class MultilayerPerceptron:
         # Calculate the cost with regularization.
         bit_set_cost = np.sum(np.log(predictions[bitwise_labels == 1]))
         bit_not_set_cost = np.sum(np.log(1 - predictions[bitwise_labels == 0]))
-        cost = (-1 / num_examples) * (bit_set_cost + bit_not_set_cost) + regularization
-
-        return cost
+        return (-1 / num_examples) * (bit_set_cost + bit_not_set_cost) + regularization
 
     @staticmethod
     def feedforward_propagation(data, thetas, layers):
@@ -242,12 +237,9 @@ class MultilayerPerceptron:
         for example_index in range(num_examples):
             # We will store layers inputs and activations in order to re-use it later.
             layers_inputs = {}
-            layers_activations = {}
-
             # Setup input layer activations.
             layer_activation = data[example_index, :].reshape((num_features, 1))
-            layers_activations[0] = layer_activation
-
+            layers_activations = {0: layer_activation}
             # Perform a feedforward pass for current training example.
             for layer_index in range(num_layers - 1):
                 layer_theta = thetas[layer_index]
@@ -260,19 +252,11 @@ class MultilayerPerceptron:
             # Remove bias units from the output activations.
             output_layer_activation = layer_activation[1:, :]
 
-            # Calculate deltas.
-
-            # For input layer we don't calculate delta because we do not
-            # associate error with the input.
-            delta = {}
-
             # Convert the output from number to vector (i.e. 5 to [0; 0; 0; 0; 1; 0; 0; 0; 0; 0])
             bitwise_label = np.zeros((num_label_types, 1))
             bitwise_label[labels[example_index][0]] = 1
 
-            # Calculate deltas for the output layer for current training example.
-            delta[num_layers - 1] = output_layer_activation - bitwise_label
-
+            delta = {num_layers - 1: output_layer_activation - bitwise_label}
             # Calculate small deltas for hidden layers for current training example.
             # The loops should go for the layers L, L-1, ..., 1.
             for layer_index in range(num_layers - 2, 0, -1):

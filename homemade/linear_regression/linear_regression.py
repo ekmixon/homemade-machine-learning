@@ -164,10 +164,7 @@ class LinearRegression:
             self.normalize_data,
         )[0]
 
-        # Do predictions using model hypothesis.
-        predictions = LinearRegression.hypothesis(data_processed, self.theta)
-
-        return predictions
+        return LinearRegression.hypothesis(data_processed, self.theta)
 
     @staticmethod
     def hypothesis(data, theta):
@@ -180,6 +177,4 @@ class LinearRegression:
         :return: predictions made by model based on provided theta.
         """
 
-        predictions = data @ theta
-
-        return predictions
+        return data @ theta

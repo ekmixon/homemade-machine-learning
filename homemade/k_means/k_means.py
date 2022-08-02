@@ -56,11 +56,8 @@ class KMeans:
         # Randomly reorder indices of training examples.
         random_ids = np.random.permutation(num_examples)
 
-        # Take the first K examples as centroids.
-        centroids = data[random_ids[:num_clusters], :]
-
         # Return generated centroids.
-        return centroids
+        return data[random_ids[:num_clusters], :]
 
     @staticmethod
     def centroids_find_closest(data, centroids):

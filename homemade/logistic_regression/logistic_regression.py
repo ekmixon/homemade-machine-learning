@@ -141,7 +141,10 @@ class LogisticRegression:
 
         # Throw an error in case if gradient descent ended up with error.
         if not minification_result.success:
-            raise ArithmeticError('Can not minimize cost function: ' + minification_result.message)
+            raise ArithmeticError(
+                f'Can not minimize cost function: {minification_result.message}'
+            )
+
 
         # Reshape the final version of model parameters.
         optimized_theta = minification_result.x.reshape((num_features, 1))
@@ -221,6 +224,4 @@ class LogisticRegression:
         :return: predictions made by model based on provided theta.
         """
 
-        predictions = sigmoid(data @ theta)
-
-        return predictions
+        return sigmoid(data @ theta)
